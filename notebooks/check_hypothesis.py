@@ -13,20 +13,17 @@ import numpy as np
 from src.config import DATA_DIR
 from src.physics import calculate_square_root_law
 
-# Список тикеров для проверки
-TICKERS = ["SBER", "FLOT", "SELG", "KMAZ"]
+TICKERS = ["SBER", "FLOT", "SELG"]
 
 for ticker in TICKERS:
     file_path = DATA_DIR / f"{ticker}_1min.csv"
     
     if not file_path.exists():
-        print(f"⚠️ Файл {file_path} не найден. Сначала запустите загрузку.")
+        print(f"Файл {file_path} не найден. Сначала запустите загрузку.")
         continue
         
-    # Загрузка
     df = pd.read_csv(file_path)
     
-    # Расчет физики
     res = calculate_square_root_law(df)
     
     if not res:
@@ -40,22 +37,18 @@ for ticker in TICKERS:
     print(f"Alpha: {alpha:.4f}")
     print(f"R^2:   {r2:.4f}")
     
-    # Построение графика
     plt.figure(figsize=(10, 6))
     
-    # 1. Сырые данные (фон)
     plt.scatter(res['raw_data']['log_Q'], res['raw_data']['log_I'], 
                 alpha=0.05, color='gray', label='Raw Data')
     
-    # 2. Все бины (красные)
+
     plt.scatter(res['binned_data']['log_Q'], res['binned_data']['log_I'], 
                 color='red', label='Binned Data')
     
-    # 3. Smart Money (зеленые)
     sm = res['smart_money']
     plt.scatter(sm['log_Q'], sm['log_I'], color='lime', s=80, label='Smart Money')
     
-    # 4. Линия тренда
     slope, intercept = res['params']
     x_vals = np.linspace(sm['log_Q'].min(), sm['log_Q'].max(), 100)
     y_vals = slope * x_vals + intercept
