@@ -42,7 +42,7 @@ pip install -r requirements.txt
 ### Сбор данных (Пример)
 Скрипт загружает историю свечей и объемов для анализа:
 ```Bash
-python src/moex_loader.py --ticker SBER --days 30
+python run_collection.py
 ```
 ### Методология исследования
 Мы разделяем активы на три группы для проверки теоремы:
